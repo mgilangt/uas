@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -29,14 +30,15 @@
     <div class="container">
         <div id="message">
         </div>
-        <h1 class="mt-4 mb-4 text-center text-danger">organization CRUD</h1>
+        <h1 class="mt-4 mb-4 text-center text-black">Organization CRUD</h1>
         <span id="message"></span>
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col col-sm-9">Organization</div>
                     <div class="col col-sm-3">
-                        <button type="button" id="add_data" class="btn btn-success btn-sm float-end">Add</button>
+                        <button type="button" id="add_data" class="btn btn-success btn-sm float-end"><i
+                                class="bi bi-file-earmark-plus-fill"></i></button>
                     </div>
                 </div>
             </div>
@@ -47,8 +49,10 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>Established</th>
+                                <th>Leader Name</th>
                                 <th>Email</th>
-                                <th>phone</th>
+                                <th>Phone</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -72,19 +76,34 @@
                             <input type="text" name="name" id="name" class="form-control" />
                             <span id="name_error" class="text-danger"></span>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email  " name="email" id="email" class="form-control" />
-                            <span id="email_error" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label class="form-label">Description</label>
                             <input type="text" name="description" id="description" class="form-control" />
                             <span id="description_error" class="text-danger"></span>
+                        </div> -->
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea type="text" name="description" id="description" class="form-control"></textarea>
+                            <span id="description_error" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">phone</label>
-                            <input type="number" name="phone" id="phone" class="form-control" />
+                            <label class="form-label">Established</label>
+                            <input type="date" name="established" id="established" class="form-control" />
+                            <span id="established_error" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Leader Name</label>
+                            <input type="text" name="leader" id="leader" class="form-control" />
+                            <span id="leader_error" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" />
+                            <span id="email_error" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" id="phone" class="form-control" />
                             <span id="phone_error" class="text-danger"></span>
                         </div>
                     </div>
@@ -124,9 +143,11 @@
 
             if ($('#action').val() == "Add") {
                 var formData = {
+                    'established': $('#established').val(),
                     'name': $('#name').val(),
                     'email': $('#email').val(),
                     'description': $('#description').val(),
+                    'leader': $('#leader').val(),
                     'phone': $('#phone').val()
                 }
                 $.ajax({
@@ -148,9 +169,11 @@
             } else if ($('#action').val() == "Update") {
                 var formData = {
                     'id': $('#id').val(),
+                    'established': $('#established').val(),
                     'name': $('#name').val(),
                     'email': $('#email').val(),
                     'description': $('#description').val(),
+                    'leader': $('#leader').val(),
                     'phone': $('#phone').val()
                 }
                 $.ajax({
@@ -186,27 +209,40 @@
                 var dataSet = [];
                 for (var i = 0; i < json.length; i++) {
                     var sub_array = {
+                        'established': json[i].established,
                         'name': json[i].name,
                         'email': json[i].email,
                         'description': json[i].description,
+                        'leader': json[i].leader,
                         'phone': json[i].phone,
-                        'action': '<button onclick="showOne(' + json[i].id +
-                            ')" class="btn btn-sm btn-warning">Edit</button>' +
-                            '<button onclick="deleteOne(' + json[i].id +
-                            ')" class="btn btn-sm btn-danger">Delete</button>'
+                        // 'action': '<div> <a onclick="showOne(' + json[i].id +
+                        //     ')" class="btn btn-sm btn-warning">Edit</a>' +
+                        //     '<a onclick="deleteOne(' + json[i].id +
+                        //     ')" class="btn btn-sm btn-danger">Delete</a></div>'
+                        'action': '<button onclick="showOne(' +
+                            json[i].id +
+                            ')" class="btn btn-sm btn-warning"> <i class="bi bi-pencil-square"></i> </button>' +
+                            ' <button onclick="deleteOne(' + json[i].id +
+                            ')" class="btn btn-sm btn-danger"> <i class="bi bi-trash-fill"></i> </button>'
+
                     };
                     dataSet.push(sub_array);
                 }
                 $('#sample_data').DataTable({
                     data: dataSet,
+                    scrollX: true,
                     columns: [{
                             data: "name"
                         },
                         {
-                            data: "email"
+                            data: "description"
+                        }, {
+                            data: "established"
                         },
                         {
-                            data: "description"
+                            data: "leader"
+                        }, {
+                            data: "email"
                         },
                         {
                             data: "phone"
@@ -245,9 +281,11 @@
             url: "http://localhost/uas/api/organization/read.php?id=" + id,
             success: function(response) {
                 $('#id').val(response.id);
+                $('#established').val(response.established);
                 $('#name').val(response.name);
                 $('#email').val(response.email);
                 $('#description').val(response.description);
+                $('#leader').val(response.leader);
                 $('#phone').val(response.phone);
 
             },
@@ -280,9 +318,6 @@
         });
     }
     </script>
-    <?php
-    include '../../views/layout/footer.php';
-    ?>
 </body>
 
 </html>

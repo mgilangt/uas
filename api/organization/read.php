@@ -20,10 +20,12 @@
             // create array
             $emp_arr = array(
                 "id" =>  $item->id,
+                "established" => $item->established,
                 "name" => $item->name,
                 "email" => $item->email,
                 "phone" => $item->phone,
                 "description" => $item->description,
+                "leader" => $item->leader,
                 "created" => $item->created
             );
         
@@ -50,10 +52,12 @@
                 extract($row);
                 $e = array(
                     "id" => $id,
+                    "established" => $established,
                     "name" => $name,
                     "email" => $email,
                     "phone" => $phone,
                     "description" => $description,
+                    "leader" => $leader,
                     "created" => $created
                 );
                 array_push($organizationArr["body"], $e);

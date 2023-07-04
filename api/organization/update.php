@@ -18,10 +18,12 @@
     $item->id = $data->id;
     
     // Organization values
+    $item->established = $data->established;
     $item->name = $data->name;
     $item->email = $data->email;
     $item->phone = $data->phone;
     $item->description = $data->description;
+    $item->leader = $data->leader;
     $item->created = date('Y-m-d H:i:s');
     
     if($item->updateOrganization()){

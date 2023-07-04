@@ -10,10 +10,12 @@
     $db = $database->getConnection();
     $item = new Organization($db);
     $data = json_decode(file_get_contents("php://input"));
+    $item->established = $data->established;
     $item->name = $data->name;
     $item->email = $data->email;
     $item->phone = $data->phone;
     $item->description = $data->description;
+    $item->leader = $data->leader;
     $item->created = date('Y-m-d H:i:s');
     
     if($item->createOrganization()){

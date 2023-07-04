@@ -6,8 +6,10 @@
         private $db_table = "organization";
         // Columns
         public $id;
+        public $established;
         public $name;
         public $description;
+        public $leader;
         public $email;
         public $phone;
         public $created;
@@ -17,7 +19,7 @@
         }
         // GET ALL
         public function getOrganizations(){
-            $sqlQuery = "SELECT id, name, description, email, phone, created FROM " . $this->db_table . "";
+            $sqlQuery = "SELECT id, established, name, description, email, leader, phone, created FROM " . $this->db_table . "";
             $stmt = $this->conn->prepare($sqlQuery);
             $stmt->execute();
             return $stmt;
@@ -27,8 +29,10 @@
             $sqlQuery = "INSERT INTO
                         ". $this->db_table ."
                     SET
+                        established = :established, 
                         name = :name, 
                         description = :description, 
+                        leader = :leader, 
                         email = :email, 
                         phone = :phone, 
                         created = :created";
@@ -36,15 +40,19 @@
             $stmt = $this->conn->prepare($sqlQuery);
         
             // sanitize
+            $this->established=htmlspecialchars(strip_tags($this->established));
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->description=htmlspecialchars(strip_tags($this->description));
+            $this->leader=htmlspecialchars(strip_tags($this->leader));
             $this->email=htmlspecialchars(strip_tags($this->email));
             $this->phone=htmlspecialchars(strip_tags($this->phone));
             $this->created=htmlspecialchars(strip_tags($this->created));
         
             // bind data
+            $stmt->bindParam(":established", $this->established);
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":description", $this->description);
+            $stmt->bindParam(":leader", $this->leader);
             $stmt->bindParam(":email", $this->email);
             $stmt->bindParam(":phone", $this->phone);
             $stmt->bindParam(":created", $this->created);
@@ -58,8 +66,10 @@
         public function getSingleOrganization(){
             $sqlQuery = "SELECT
                         id, 
+                        established, 
                         name, 
                         description, 
+                        leader, 
                         email, 
                         phone, 
                         created
@@ -73,8 +83,10 @@
             $stmt->execute();
             $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
             
+            $this->established = $dataRow['established'];
             $this->name = $dataRow['name'];
             $this->description = $dataRow['description'];
+            $this->leader = $dataRow['leader'];
             $this->email = $dataRow['email'];
             $this->phone = $dataRow['phone'];
             $this->created = $dataRow['created'];
@@ -84,8 +96,10 @@
             $sqlQuery = "UPDATE
                         ". $this->db_table ."
                     SET
+                        established = :established, 
                         name = :name, 
                         description = :description, 
+                        leader = :leader, 
                         email = :email, 
                         phone = :phone, 
                         created = :created
@@ -94,16 +108,20 @@
         
             $stmt = $this->conn->prepare($sqlQuery);
         
+            $this->established=htmlspecialchars(strip_tags($this->established));
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->description=htmlspecialchars(strip_tags($this->description));
+            $this->leader=htmlspecialchars(strip_tags($this->leader));
             $this->email=htmlspecialchars(strip_tags($this->email));
             $this->phone=htmlspecialchars(strip_tags($this->phone));
             $this->created=htmlspecialchars(strip_tags($this->created));
             $this->id=htmlspecialchars(strip_tags($this->id));
         
             // bind data
+            $stmt->bindParam(":established", $this->established);
             $stmt->bindParam(":name", $this->name);
             $stmt->bindParam(":description", $this->description);
+            $stmt->bindParam(":leader", $this->leader);
             $stmt->bindParam(":email", $this->email);
             $stmt->bindParam(":phone", $this->phone);
             $stmt->bindParam(":created", $this->created);
